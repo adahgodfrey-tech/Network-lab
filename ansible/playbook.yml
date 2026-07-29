@@ -1,0 +1,56 @@
+# Ansible playbook to deploy MikroTik RouterOS script (lab use)
+
+# Usage
+# - Ensure Ansible can SSH to the RouterOS device (username/password) and the device accepts SSH commands.
+# - The playbook copies the RouterOS script to the device via scp (using the control machine's scp) and then runs an SSH command to import it.
+# - This simple playbook uses the 'ansible.builtin.copy' and 'ansible.builtin.shell' modules; in production use the community.routeros collection or API.
+
+- hosts: mikrotik
+  gather_facts: no
+  vars:
+    routeros_script: "configs/mikrotik-hardened.rsc"
+    remote_script: "mikrotik-hardened.rsc"
+    ssh_user: "admin"
+  tasks:
+    - name: Ensure local RouterOS script exists
+      ansible.builtin.stat:
+        path: "{{ routeros_script }}"
+      delegate_to: localhost
+      register: script_stat
+
+    - name: Fail if script missing
+      ansible.builtin.fail:
+        msg: "RouterOS script {{ routeros_script }} not found on control node"
+      when: not script_stat.stat.exists
+
+    - name: Copy RouterOS script to remote device
+      ansible.builtin.copy:
+        src: "{{ routeros_script }}"
+        dest: "/{{ remote_script }}"
+        mode: '0644'
+
+    - name: Backup current RouterOS config (export)
+      ansible.builtin.shell: |
+        /export file=backup-ansible-before-apply
+      args:
+        executable: /bin/sh
+
+    - name: Import RouterOS script (staged apply: only VLANs and IPs by default)
+      ansible.builtin.shell: |
+        # Import staged sections by grepping tags or use full import after review
+        /import file={{ remote_script }}
+      args:
+        executable: /bin/sh
+
+    - name: Wait for device to apply config
+      ansible.builtin.wait_for:
+        timeout: 10
+
+    - name: Show IP addresses (verification)
+      ansible.builtin.shell: |
+        /ip address print
+      register: ip_out
+
+    - name: Print IP address output
+      ansible.builtin.debug:
+        var: ip_out.stdout

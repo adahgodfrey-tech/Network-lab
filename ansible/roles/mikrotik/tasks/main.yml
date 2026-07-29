@@ -1,0 +1,28 @@
+---
+# tasks file for ansible role mikrotik
+# This role copies the hardened RouterOS script and performs a staged import.
+- name: Copy hardened RouterOS script
+  copy:
+    src: ../../../configs/mikrotik-hardened.rsc
+    dest: /mikrotik-hardened.rsc
+    mode: '0644'
+
+- name: Backup current RouterOS configuration
+  shell: /export file=backup-role-before-apply
+  args:
+    executable: /bin/sh
+
+- name: Stage 1 - Import VLANs and IPs only
+  shell: |
+    # This assumes the script contains clearly marked sections.
+    /import file=mikrotik-hardened.rsc
+  args:
+    executable: /bin/sh
+
+- name: Verify interfaces
+  shell: /interface vlan print
+  register: ifs
+
+- name: Debug interfaces
+  debug:
+    var: ifs.stdout

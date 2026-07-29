@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <style>
+    .box { fill:#f5f7ff; stroke:#2b6cb0; stroke-width:2 }
+    .text { font-family: Arial, Helvetica, sans-serif; font-size:14px; fill:#1a202c }
+    .title { font-size:18px; font-weight:bold }
+    .link { stroke:#a0aec0; stroke-width:1; }
+  </style>
+
+  <!-- Core / Internet -->
+  <rect x="520" y="20" width="160" height="60" class="box"/>
+  <text x="600" y="55" text-anchor="middle" class="title">Internet / Core</text>
+
+  <!-- L3 Switch -->
+  <rect x="490" y="110" width="220" height="80" class="box"/>
+  <text x="600" y="150" text-anchor="middle" class="title">L3 Switch (RouterOS)</text>
+  <text x="600" y="168" text-anchor="middle" class="text">SVIs / Inter-VLAN routing</text>
+
+  <!-- VLAN blocks -->
+  <!-- Left column -->
+  <rect x="60" y="240" width="260" height="90" class="box"/>
+  <text x="190" y="265" class="title">VLAN 10</text>
+  <text x="190" y="285" class="text">BUSINESS</text>
+  <text x="190" y="305" class="text">10.10.0.0/20</text>
+
+  <rect x="60" y="360" width="260" height="90" class="box"/>
+  <text x="190" y="385" class="title">VLAN 20</text>
+  <text x="190" y="405" class="text">MARKETING</text>
+  <text x="190" y="425" class="text">10.10.16.0/21</text>
+
+  <!-- Right column -->
+  <rect x="880" y="240" width="260" height="90" class="box"/>
+  <text x="1010" y="265" class="title">VLAN 30</text>
+  <text x="1010" y="285" class="text">COMPUTER_SCIENCE</text>
+  <text x="1010" y="305" class="text">10.10.24.0/22</text>
+
+  <rect x="880" y="360" width="260" height="90" class="box"/>
+  <text x="1010" y="385" class="title">VLAN 40</text>
+  <text x="1010" y="405" class="text">ELECTRICAL</text>
+  <text x="1010" y="425" class="text">10.10.28.0/23</text>
+
+  <!-- Fine Art and Services below the L3 switch -->
+  <rect x="370" y="500" width="220" height="70" class="box"/>
+  <text x="480" y="525" class="title">VLAN 50</text>
+  <text x="480" y="545" class="text">FINE_ART 10.10.30.0/24</text>
+
+  <rect x="660" y="500" width="220" height="70" class="box"/>
+  <text x="770" y="525" class="title">Service VLANs</text>
+  <text x="770" y="545" class="text">VLAN60 Servers 10.10.31.0/24</text>
+  <text x="770" y="565" class="text">VLAN70 Printers 10.10.32.0/26</text>
+
+  <!-- Links -->
+  <line x1="600" y1="190" x2="190" y2="240" class="link"/>
+  <line x1="600" y1="190" x2="1010" y2="240" class="link"/>
+  <line x1="600" y1="190" x2="480" y2="500" class="link"/>
+  <line x1="600" y1="190" x2="770" y2="500" class="link"/>
+
+  <!-- Legend -->
+  <rect x="20" y="620" width="1160" height="60" fill="#fff8dc" stroke="#d69e2e"/>
+  <text x="40" y="645" class="text">Legend: L3 Switch provides SVIs (gateway IPs) and inter-VLAN routing. Trunks connect to distribution/core. Access ports map to VLANs per ip-plan.md.</text>
+
+</svg>
